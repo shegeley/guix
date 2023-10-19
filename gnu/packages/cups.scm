@@ -448,7 +448,7 @@ applications''.  These must be installed separately.")
                   (for-each
                    (lambda (f)
                      (symlink f
-                              (string-append out "/lib/cups/filter"
+                              (string-append out "/lib/cups/filter/"
                                              (basename f))))
                    (find-files (string-append cups-filters "/lib/cups/filter")))
 
