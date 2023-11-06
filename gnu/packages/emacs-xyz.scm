@@ -31585,13 +31585,13 @@ current tree.")
      "This package dynamically generates org-agenda-files.")
     (license license:gpl3+)))
 
-(define-public emacs-org-ql-dynamic-agenda
+(define-public emacs-org-dynamic-agenda-ql
   (package
     (inherit emacs-org-dynamic-agenda)
-    (name "emacs-org-ql-dynamic-agenda")
+    (name "emacs-org-dynamic-agenda-ql")
     (arguments
      (list #:include
-           #~(list "org-ql-dynamic-agenda\\.el" "README\\.org")))
+           #~(list "org-dynamic-agenda-ql\\.el" "README\\.org")))
     (propagated-inputs (list emacs-org-ql))
     (description
      "This package dynamically generates org-agenda-files, and take advantage
@@ -38349,8 +38349,8 @@ Emacs.")
 
 (define-public emacs-semi-epg
   ;; No release since Dec 24, 2003.
-  (let ((commit "9370961ddcee78e389e44b36d38c3d93f8351619")
-        (revision "246"))
+  (let ((commit "d15603b8eb791f2057b48071c262996ad7767505")
+        (revision "247"))
     (package
       (name "emacs-semi-epg")
       (version (git-version "1.14.6" revision commit))
@@ -38362,7 +38362,7 @@ Emacs.")
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "13f267j0mrji9cvjhq129nslrj2gwvq7ibsz384a4qilxf5rhccc"))))
+                  "0cxrzgxflwgz9wsim84vrliwvkf53v242di4dvn2dfh65gccwqjx"))))
       (build-system emacs-build-system)
       (propagated-inputs (list emacs-flim-lb))
       (inputs (list emacs-bbdb-vcard))
@@ -38376,15 +38376,11 @@ EasyPG and latest Emacs.")
 
 (define-public emacs-wanderlust
   ;; No release since Jan 15, 2010.
-  ;; FIXME: Building with emacs-next-pgtk would yield a void variable related
-  ;; macro-expansion failure at runtime, so don't rewrite emacs input of this
-  ;; package.
-  (let ((version "2.15.9")
-        (revision "791")
-        (commit "8369b2d5170a174652294835dd9a18ed21a38cb2"))
+  (let ((commit "3e8cf26abd9c5c8e4fc611032e259ca930665641")
+        (revision "803"))
     (package
       (name "emacs-wanderlust")
-      (version (git-version version revision commit))
+      (version (git-version "2.15.9" revision commit))
       (source (origin
                 (method git-fetch)
                 (uri (git-reference
@@ -38402,7 +38398,7 @@ EasyPG and latest Emacs.")
                            (("package-user-dir") "NONE"))))
                 (sha256
                  (base32
-                  "0nqa9z61r308j61rgglacjsfddncbm185gp3rnzqkrpb5qsjzngk"))))
+                  "0k9r3j7pcnvnnj0km8ggjdrf2nfgn1mfq7r7267bk3r3x92cvqh9"))))
       (build-system emacs-build-system)
       (arguments
        (list #:phases

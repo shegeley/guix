@@ -876,6 +876,38 @@ attributes of microbiome data - zero-inflation and over-dispersion, are
 simultaneously considered.")
       (license license:gpl3))))
 
+(define-public r-ewastools
+  (let ((commit "f7646cacd73266708479b3fea5d625054d179f95")
+        (revision "1"))
+    (package
+      (name "r-ewastools")
+      (version (git-version "1.7.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/hhhh5/ewastools/")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "0irarlnxfnasa755adxsn67rxsy01zwhjhw18g4cag08cqiyyw41"))))
+      (properties `((upstream-name . "ewastools")))
+      (build-system r-build-system)
+      (propagated-inputs
+       (list r-data-table
+             r-igraph
+             r-illuminaio
+             r-mblm
+             r-quadprog))
+      (native-inputs (list r-knitr))
+      (home-page "https://github.com/hhhh5/ewastools/")
+      (synopsis
+       "Quality control toolset for the Illumina Infinium DNA methylation")
+      (description
+       "This package provides a collection of useful functions for working
+with DNA methylation micro-array data.")
+      (license license:unlicense))))
+
 (define-public r-numbat
   (let ((commit "4ab7752e7d267a3f443756675728521a9b0a7295")
         (revision "1"))
@@ -9889,6 +9921,51 @@ tasks.")
       (synopsis "Discovery of communities in Pore-C concatemers")
       (description "This is a package for the discovery of communities in
 Pore-C concatemers.")
+      (license license:gpl3))))
+
+(define-public r-dnamcrosshyb
+  ;; There aren't any releases.
+  (let ((commit "fe8acb33667e81f00dcb84e0fa75c87ab2db5d8f")
+        (revision "1"))
+    (package
+      (name "r-dnamcrosshyb")
+      (version (git-version "0.0.0.9000" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/pjhop/DNAmCrosshyb")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "12j1xsiqpvny5rp23z1az0k4cj5ajbcwkg65z00s16vywi2rx6nb"))))
+      (properties `((upstream-name . "DNAmCrosshyb")))
+      (build-system r-build-system)
+      (propagated-inputs
+       (list r-biocgenerics
+             r-biocparallel
+             r-biostrings
+             r-bsgenome-hsapiens-ucsc-hg19-masked
+             r-bsgenome-hsapiens-ucsc-hg38-masked
+             r-dplyr
+             r-genomicranges
+             r-ggplot2
+             r-iranges
+             r-magrittr
+             r-minfi
+             r-purrr
+             r-s4vectors
+             r-shiny
+             r-stringi
+             r-stringr
+             r-tibble
+             r-tidyr
+             r-watermelon))
+      (home-page "https://github.com/pjhop/DNAmCrosshyb")
+      (synopsis "DNAmCrosshyb")
+      (description
+       "This package provides helper functions to detect cross-hybridization
+on Illumina DNAm arrays.")
       (license license:gpl3))))
 
 (define-public r-doubletcollection

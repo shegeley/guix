@@ -206,17 +206,15 @@ Guile.")
 (define-public mescc-tools
   (package
     (name "mescc-tools")
-    (version "1.4.0")
+    (version "1.5.0")
     (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://git.savannah.nongnu.org/r/mescc-tools.git")
-                    (commit (string-append "Release_" version))
-                    (recursive? #t)))             ;for M2libc
-              (file-name (git-file-name name version))
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/oriansj/mescc-tools/releases/download/"
+                    "Release_" version "/" name "-" version ".tar.gz"))
               (sha256
                (base32
-                "0z2ni2qn2np1walcaqlxz8sinzb78d4hiq9glddzf26wxc226hs4"))))
+                "1vjczlajyrbjcx9ld35vhdqbxfdwwy3axg0jray3iwnrf70qr700"))))
     (build-system gnu-build-system)
     (supported-systems '("i686-linux" "x86_64-linux"
                          "armhf-linux" "aarch64-linux"
@@ -239,19 +237,20 @@ get_machine.")
 (define-public m2-planet
   (package
     (name "m2-planet")
-    (version "1.9.0")
+    (version "1.11.0")
     (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/oriansj/m2-planet")
-                    (commit (string-append "Release_" version))
-                    (recursive? #t)))             ;for M2libc
-              (file-name (git-file-name name version))
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/oriansj/M2-Planet/releases/download/"
+                    "Release_" version "/" name "-" version ".tar.gz"))
               (sha256
                (base32
-                "0cgvvq91cbxxm93k8ayyvhpaf3c2lv10qw4wyqwn3hc1qb1cfyvr"))))
+                "1c510p55amxjyvjlx9jpa30gixlgmf6mmfnaqcs46412krymwg38"))))
     (native-inputs (list mescc-tools))
     (build-system gnu-build-system)
+    (supported-systems '("i686-linux" "x86_64-linux"
+                         "armhf-linux" "aarch64-linux"
+                         "riscv32-linux" "riscv64-linux"))
     (arguments
      `(#:make-flags (list (string-append "PREFIX=" (assoc-ref %outputs "out"))
                           ,(string-append "CC=" (cc-for-target)))

@@ -703,7 +703,7 @@ for reading and writing.")
 (define-public erfa
   (package
     (name "erfa")
-    (version "2.0.0")
+    (version "2.0.1")
     (source
      (origin
        (method git-fetch)
@@ -712,7 +712,7 @@ for reading and writing.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0s9dpj0jdkqcg552f00jhd722czji4pffabmpys5pgi6djckq4f4"))))
+        (base32 "1hxjbcvdlq4871r17fphbaf3bd8dsjagp1rdb3j8v6kr4f1dil9n"))))
     (build-system gnu-build-system)
     (native-inputs
      (list automake autoconf libtool pkg-config))
@@ -923,7 +923,7 @@ astronomical image-processing packages like Drizzle, Swarp or SExtractor.")
            libtirpc
            qtbase-5
            zlib))
-    (home-page "https://projets.lam.fr/projects/unsio/wiki")
+    (home-page "https://projets.lam.fr/projects/glnemo2/wiki/Wiki")
     (synopsis "3D interactive visualization program for n-body like particles")
     (description
      "GLNEMO2 is an interactive 3D visualization program which displays
@@ -1466,13 +1466,13 @@ accurately in real time at any rate desired.")
 (define-public python-astropy
   (package
     (name "python-astropy")
-    (version "5.3.3")
+    (version "5.3.4")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "astropy" version))
        (sha256
-        (base32 "1fwk7x4q1hgdf9m8q613c6q7045sam1g934vgqv588ksbngxyc03"))
+        (base32 "1n7iwvjari4xv37094cpiapmjhhm57b04hi4r40wqb5czbigg46l"))
        (modules '((guix build utils)))
        (snippet
         '(begin
@@ -1527,7 +1527,9 @@ accurately in real time at any rate desired.")
                              "not remote_data"
                              ;; XXX: Check why this tests failing.
                              " and not test_ignore_sigint"
-                             " and not test_parquet_filter"))))))))
+                             " and not test_parquet_filter"
+                             ;; See https://github.com/astropy/astropy/issues/15537
+                             " and not test_pvstar"))))))))
     (native-inputs
      (list pkg-config
            python-colorlog
@@ -1784,7 +1786,7 @@ bad pixel tracking throughout the reduction process.")
 (define-public python-cdflib
   (package
     (name "python-cdflib")
-    (version "1.2.1")
+    (version "1.2.3")
     (source
      (origin
        (method git-fetch)   ; no tests in pypi archive
@@ -1793,7 +1795,7 @@ bad pixel tracking throughout the reduction process.")
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0v73fl69pxbk52ilhj2593zmn3qhqy4hrrwby8m9z2sq3fd5xk0v"))))
+        (base32 "0vpgcbc9pmx0qqfia1frnwq3jkgfp8y3ikqdnzs5bs1sr13p9p3w"))))
     (build-system pyproject-build-system)
     (arguments
      (list #:phases
@@ -1833,13 +1835,13 @@ attempting to maintain ISTP compliance
 (define-public python-crds
   (package
     (name "python-crds")
-    (version "11.17.6")
+    (version "11.17.7")
     (source (origin
               (method url-fetch)
               (uri (pypi-uri "crds" version))
               (sha256
                (base32
-                "1sbfl45rx21g622vm8baqv0ydcdixf1jdjgydn07sxl7kn15fa4g"))))
+                "10cxhb1xss21p992bfd5jm8bix1n12h0fd8m5sp6bcsgn6zs94v0"))))
     (build-system pyproject-build-system)
     (arguments
      (list
@@ -1994,13 +1996,13 @@ code to be greatly simplified.")
 (define-public python-ephem
   (package
     (name "python-ephem")
-    (version "4.1.4")
+    (version "4.1.5")
     (source (origin
               (method url-fetch)
               (uri (pypi-uri "ephem" version))
               (sha256
                (base32
-                "0q67z79lgwdylxagbsjm42xvsmk5jmgvghy36m2n5lb2446rz9bk"))))
+                "0ainqbnvw320pc61q5b6ad6f2mhn1pvrlnq489cwfx0m82mahr0c"))))
     (build-system python-build-system)
     (native-inputs (list tzdata))
     (home-page "https://rhodesmill.org/pyephem/")
@@ -2601,24 +2603,22 @@ of axis order, spatial projections, and spectral units that exist in the wild.
        (file-name (git-file-name name version))
        (sha256
         (base32 "0kzcncqir4v7nhk9lxj9gxr32p3krkaqa58y2i4kksgxxy24qw4z"))))
-    (build-system python-build-system)
+    (build-system pyproject-build-system)
     (arguments
      (list
-      ;; NOTE: (Sharlatan-20220523T231348+0100): Tests depends on old Python2
-      ;; libarry `sphere'
-      #:tests? #f
+      ;; XXX: Disable one failing test
+      ;; See https://github.com/spacetelescope/spherical_geometry/issues/252
+      #:test-flags #~(list "-k" "not test_overlap")
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'unpack 'preparations
             (lambda _
-              ;; Fixing: setuptools-scm was unable to detect version for ...
-              (substitute* "setup.py"
-                (("use_scm_version=True")
-                 (format #f "version=~s" #$version))
-                (("setup_requires=\\['setuptools_scm'\\],.*")
-                 ""))
+              (setenv "SETUPTOOLS_SCM_PRETEND_VERSION" #$version)
               ;; Use our own libraries in place of bundles.
-              (setenv "USE_SYSTEM_QD" "1"))))))
+              (setenv "USE_SYSTEM_QD" "1")))
+          (add-before 'check 'build-extensions
+            (lambda _
+              (invoke "python" "setup.py" "build_ext" "--inplace"))))))
     (native-inputs
      (list python-pytest
            python-setuptools-scm))
@@ -3025,7 +3025,7 @@ standard astronomy libraries:
 (define-public libxisf
   (package
     (name "libxisf")
-    (version "0.2.9")
+    (version "0.2.10")
     (source
      (origin
        (method git-fetch)
@@ -3034,7 +3034,7 @@ standard astronomy libraries:
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "02cxv86h0ng4kmvyjkf7cr2ak2i3vpf0q0ik7jg4nmqjsidcs796"))))
+        (base32 "0q5qipn8887yhrk9pmi4fksxxmqas3w2aw2p194yhzkjapxk2k9h"))))
     (build-system cmake-build-system)
     (arguments
      (list #:configure-flags #~(list "-DUSE_BUNDLED_LIBS=OFF")))
@@ -3231,19 +3231,8 @@ It can be used to calculate the trajectory of satellites.")
         (base32 "0a6wb1a9adwd01dmy0r03xxp8iz9y7mvh30088ajilhj4lf90vxa"))))
     (build-system cmake-build-system)
     (arguments
-     `(#:tests? #f                      ;no test provided
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'configure
-           (lambda* (#:key outputs #:allow-other-keys)
-             (mkdir-p "build")
-             (chdir "build")
-             (invoke
-              "cmake"
-              "-G" "Unix Makefiles"
-              "-DCMAKE_BUILD_TYPE=Release"
-              (string-append "-DCMAKE_INSTALL_PREFIX=" (assoc-ref outputs "out"))
-              ".."))))))
+     (list ;; No test provided
+      #:tests? #f))
     (native-inputs
      (list boost pkg-config))
     (inputs
@@ -3435,13 +3424,13 @@ milliarcsecond).")
 (define-public python-jwst
   (package
     (name "python-jwst")
-    (version "1.12.3")
+    (version "1.12.5")
     (source (origin
               (method url-fetch)
               (uri (pypi-uri "jwst" version))
               (sha256
                (base32
-                "0bw7i0pmpdgk2zf47d57g45hm3yb4wbrf1p19z9vg555qv4f4kr5"))))
+                "0blrl00lz1snhcnr7j59nh05rnpqxdnfp8hhgagkr50h85q4smrn"))))
     (build-system pyproject-build-system)
     (arguments
      (list
@@ -3502,13 +3491,13 @@ exposures and high-level data products (mosaics, extracted spectra, etc.).")
 (define-public python-pyerfa
   (package
     (name "python-pyerfa")
-    (version "2.0.0.3")
+    (version "2.0.1.1")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "pyerfa" version))
        (sha256
-        (base32 "0f8zykzxjsiwv5ibdn5asla2ng2xl0xdkrcrrd61j31mb3xbnzyp"))
+        (base32 "0swsdkipnk73iflsa7qbaw89wahbnfyvplqaxwi0yfrxippp9b6v"))
        (modules '((guix build utils)))
        (snippet
         #~(begin
@@ -3519,6 +3508,7 @@ exposures and high-level data products (mosaics, extracted spectra, etc.).")
      (list
       ;; Disable only one failing test:
       ;; AttributeError: __warningregistry__
+      ;; See https://github.com/liberfa/pyerfa/issues/126
       #:test-flags #~(list "-k" "not test_errwarn_reporting")
       #:phases
       #~(modify-phases %standard-phases
@@ -3547,13 +3537,21 @@ functions, so that they can be called with scalar or array inputs.")
 (define-public python-pynbody
   (package
     (name "python-pynbody")
-    (version "1.3.1")
+    (version "1.4.1")
     (source
      (origin
-       (method url-fetch)
-       (uri (pypi-uri "pynbody" version))
+       (method git-fetch) ;PyPi doesn't have not prebuit version.
+       (uri (git-reference
+             (url "https://github.com/pynbody/pynbody")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1yp7ja66zqmbnh7bbwbyimxq1nkrmjrcif2rzfm1hswm0fp2fbga"))))
+        (base32 "1vl1yif3bsazcil6saghrpa4qsg47fnr7xnkjpqnp44b7ipww27r"))
+       (modules '((guix build utils)))
+       (snippet
+        ;; Symlink goes to not existing directory.
+        #~(for-each delete-file '("docs/testdata"
+                                  "docs/tutorials/example_code/testdata")))))
     (build-system pyproject-build-system)
     (arguments
      (list #:test-flags #~(list
@@ -3771,32 +3769,23 @@ between image and reference catalogs. Currently only aligning images with
 @code{FITS WCS} and @code{JWST gWCS} are supported.")
     (license license:bsd-3)))
 
-(define-public python-asdf
+(define-public python-asdf-3.0
   (package
     (name "python-asdf")
-    (version "2.15.0")
+    (version "3.0.0")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "asdf" version))
        (sha256
-        (base32 "11s56797l5330kkhppkyz0bsvms016knmyswj4gx91zrxf8iqvv8"))))
+        (base32 "1a6lf75q9w8fsyq3hn6a7fyldkkyqxddlq21fwdfjwij40dzh3s8"))))
     (build-system pyproject-build-system)
-    (arguments
-     (list #:test-flags
-           #~(list "-k" (string-append
-                         "not test_overwrite"
-                         " and not test_tagging_scalars"
-                         " and not test_info_command"
-                         " and not test_array_inline_threshold_recursive"))))
     (native-inputs
-     (list python-astropy
-           python-fsspec
+     (list python-fsspec
            python-packaging
            python-psutil
            python-pytest
            python-pytest-doctestplus
-           python-pytest-openfiles
            python-pytest-remotedata
            python-semantic-version
            python-setuptools-scm))
@@ -3804,10 +3793,9 @@ between image and reference catalogs. Currently only aligning images with
      (list python-asdf-standard
            python-asdf-transform-schemas
            python-asdf-unit-schemas
+           python-attrs ;; for vendorized jsonschema
            python-importlib-metadata
-           python-importlib-resources
            python-jmespath
-           python-jsonschema
            python-lz4
            python-numpy
            python-pyyaml))
@@ -3818,6 +3806,34 @@ between image and reference catalogs. Currently only aligning images with
 interchange format for scientific data.  This package contains the Python
 implementation of the ASDF Standard.")
     (license license:bsd-3)))
+
+(define-public python-asdf-2.15
+  (package
+    (inherit python-asdf-3.0)
+    (version "2.15.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "asdf" version))
+       (sha256
+        (base32 "11s56797l5330kkhppkyz0bsvms016knmyswj4gx91zrxf8iqvv8"))))
+    (arguments
+     (list #:test-flags
+           #~(list "-k" (string-append
+                         "not test_overwrite"
+                         " and not test_tagging_scalars"
+                         " and not test_info_command"
+                         " and not test_array_inline_threshold_recursive"))))
+    (native-inputs
+     (modify-inputs (package-native-inputs python-asdf-3.0)
+       (prepend python-astropy python-pytest-openfiles)))
+    (propagated-inputs
+     (modify-inputs (package-propagated-inputs python-asdf-3.0)
+       (prepend python-jsonschema python-importlib-resources)))))
+
+(define-public python-asdf
+  ;; Default version of ASDF..
+  python-asdf-2.15)
 
 (define-public python-asdf-standard
   (package
@@ -4207,7 +4223,7 @@ pipelines.")
 (define-public python-astroalign
   (package
     (name "python-astroalign")
-    (version "2.4.2")
+    (version "2.5.0")
     (source
      (origin
        ;; There are no tests in the PyPI tarball.
@@ -4217,7 +4233,7 @@ pipelines.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0hly20a65540hr3l1lsd1i4d90a0vdrbwnn6zx3z8s89ha9lq3pb"))))
+        (base32 "0br1v2l48jx214a1bcdr8wz1wggcswcbz4cqv8d19fd46fc4qlhy"))))
     (build-system pyproject-build-system)
     (native-inputs
      (list python-astropy

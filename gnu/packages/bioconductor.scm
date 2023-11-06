@@ -68,6 +68,42 @@
 
 ;;; Annotations
 
+(define-public r-bsgenome-hsapiens-ucsc-hg38-masked
+  (package
+    (name "r-bsgenome-hsapiens-ucsc-hg38-masked")
+    (version "1.4.5")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (bioconductor-uri "BSgenome.Hsapiens.UCSC.hg38.masked" version
+                              'annotation))
+       (sha256
+        (base32 "0j71hdxqvvc0s8mc6jp6zk502mrf095qazj95yzzb4rm6sjvd20m"))))
+    (properties `((upstream-name . "BSgenome.Hsapiens.UCSC.hg38.masked")))
+    (build-system r-build-system)
+    (propagated-inputs (list r-bsgenome r-bsgenome-hsapiens-ucsc-hg38
+                             r-genomeinfodb))
+    (home-page
+     "https://bioconductor.org/packages/BSgenome.Hsapiens.UCSC.hg38.masked")
+    (synopsis
+     "Full masked genomic sequences for Homo sapiens (UCSC version hg38)")
+    (description
+     "This package provides the complete genome sequences for Homo sapiens as
+provided by UCSC (genome hg38, based on assembly GRCh38.p14 since 2023/01/31).
+The sequences are the same as in BSgenome.Hsapiens.UCSC.hg38, except that each
+of them has the 4 following masks on top:
+
+@enumerate
+@item the mask of assembly gaps (AGAPS mask);
+@item the mask of intra-contig ambiguities (AMB mask);
+@item the mask of repeats from @code{RepeatMasker} (RM mask);
+@item the mask of repeats from Tandem Repeats Finder (TRF mask).
+@end enumerate
+
+Only the AGAPS and AMB masks are \"active\" by default.  The sequences are stored
+in @code{MaskedDNAString} objects.")
+    (license license:artistic2.0)))
+
 (define-public r-hpo-db
   (package
     (name "r-hpo-db")
@@ -8133,6 +8169,42 @@ nucleotide sequence analysis.  The package is primarily useful to developers
 of other R packages who wish to make use of HTSlib.")
     (license license:lgpl2.0+)))
 
+(define-public r-rnbeads
+  (package
+    (name "r-rnbeads")
+    (version "2.20.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (bioconductor-uri "RnBeads" version))
+       (sha256
+        (base32 "15z7l4nmpy01xm19717l27nwf3rfsn6wjv211fn2y4ls40mz75qp"))))
+    (properties `((upstream-name . "RnBeads")))
+    (build-system r-build-system)
+    (propagated-inputs
+     (list r-biocgenerics
+           r-cluster
+           r-ff
+           r-fields
+           r-genomicranges
+           r-ggplot2
+           r-gplots
+           r-gridextra
+           r-illuminaio
+           r-iranges
+           r-limma
+           r-mass
+           r-matrixstats
+           r-methylumi
+           r-plyr
+           r-s4vectors))
+    (home-page "https://bioconductor.org/packages/RnBeads")
+    (synopsis "RnBeads")
+    (description
+     "@code{RnBeads} facilitates comprehensive analysis of various types of DNA
+methylation data at the genome scale.")
+    (license license:gpl3)))
+
 (define-public r-impute
   (package
     (name "r-impute")
@@ -8636,6 +8708,44 @@ replicability across datasets using neighbor voting.  @code{MetaNeighbor} works
 on the basis that cells of the same type should have more similar gene expression
 profiles than cells of different types.")
     (license license:expat)))
+
+(define-public r-methylaid
+  (package
+    (name "r-methylaid")
+    (version "1.36.0")
+    (source
+    (origin
+      (method url-fetch)
+      (uri (bioconductor-uri "MethylAid" version))
+      (sha256
+        (base32 "0mzml9j6f7yycf9747ikkpfvxnwji07h8jhwa9a54ix2d0wyxk3d"))))
+    (properties `((upstream-name . "MethylAid")))
+    (build-system r-build-system)
+    (propagated-inputs
+     (list r-biobase
+           r-biocgenerics
+           r-biocparallel
+           r-ggplot2
+           r-gridbase
+           r-hexbin
+           r-matrixstats
+           r-minfi
+           r-rcolorbrewer
+           r-shiny
+           r-summarizedexperiment))
+    (native-inputs (list r-knitr))
+    (home-page "https://git.bioconductor.org/packages/MethylAid")
+    (synopsis
+     "Quality control of large Illumina DNA Methylation array data sets")
+    (description
+     "This package provides a visual and interactive web application using
+RStudio's shiny package.  Bad quality samples are detected using sample-dependent
+and sample-independent controls present on the array and user adjustable
+thresholds.  In depth exploration of bad quality samples can be performed using
+several interactive diagnostic plots of the quality control probes present on
+the array.  Furthermore, the impact of any batch effect provided by the user can
+be explored.")
+    (license license:gpl2+)))
 
 (define-public r-methylkit
   (package
@@ -9419,6 +9529,37 @@ package contains functions for combining the results of multiple runs of gene
 set analyses.")
     (license license:gpl2+)))
 
+(define-public r-powertcr
+  (package
+    (name "r-powertcr")
+    (version "1.22.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (bioconductor-uri "powerTCR" version))
+       (sha256
+        (base32 "06fmphdq95pjbbvm8m8h1wajbp3vhl0zj7ddbzks9fy7ankp1n3i"))))
+    (properties `((upstream-name . "powerTCR")))
+    (build-system r-build-system)
+    (propagated-inputs
+     (list r-cubature
+           r-doparallel
+           r-evmix
+           r-foreach
+           r-magrittr
+           r-purrr
+           r-truncdist
+           r-vegan
+           r-vgam))
+    (native-inputs (list r-knitr))
+    (home-page "https://bioconductor.org/packages/powerTCR")
+    (synopsis "Model-based comparative analysis of the TCR repertoire")
+    (description
+     "This package provides a model for the clone size distribution of the
+@acronym{TCR, T-cell receptor} repertoire.  Further, it permits comparative
+analysis of TCR repertoire libraries based on theoretical model fits.")
+    (license license:artistic2.0)))
+
 ;; This is a CRAN package, but it depends on a Bioconductor package:
 ;; r-aroma-light, r-dnacopy..
 (define-public r-pscbs
@@ -10149,6 +10290,49 @@ two different experiments.  @code{scmap} is a method for projecting cells from
 a scRNA-seq experiment onto the cell-types or individual cells identified in a
 different experiment.")
     (license license:gpl3)))
+
+(define-public r-screpertoire
+  (package
+    (name "r-screpertoire")
+    (version "1.12.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (bioconductor-uri "scRepertoire" version))
+       (sha256
+        (base32 "1wgs8dv5zl82iciy86w5ws1gq8v2piklcifbw7gmbw60kijyr2l1"))))
+    (properties `((upstream-name . "scRepertoire")))
+    (build-system r-build-system)
+    (propagated-inputs
+     (list r-doparallel
+           r-dplyr
+           r-ggalluvial
+           r-ggplot2
+           r-ggraph
+           r-igraph
+           r-plyr
+           r-powertcr
+           r-reshape2
+           r-rlang
+           r-seuratobject
+           r-singlecellexperiment
+           r-stringdist
+           r-stringr
+           r-summarizedexperiment
+           r-tidygraph
+           r-vegan))
+    (native-inputs (list r-knitr))
+    (home-page "https://bioconductor.org/packages/scRepertoire")
+    (synopsis "Toolkit for single-cell immune receptor profiling")
+    (description
+     "The scRepertoire package was built to process data derived from the 10x
+Genomics Chromium Immune Profiling for both @acronym{TCR, T-cell receptor} and
+@acronym{Ig, immunoglobulin} enrichment workflows and subsequently interacts with
+the popular Seurat and SingleCellExperiment R packages.  It also allows for
+general analysis of single-cell clonotype information without the use of
+expression information.  The package functions as a wrapper for Startrac and
+powerTCR R packages.")
+    (license license:gpl2)))
 
 (define-public r-scry
   (package

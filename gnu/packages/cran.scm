@@ -3223,6 +3223,27 @@ user-friendly output, and compatibility with tests implemented in R.")
 objects.")
     (license license:gpl3)))
 
+(define-public r-mblm
+  (package
+    (name "r-mblm")
+    (version "0.12.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (cran-uri "mblm" version))
+       (sha256
+        (base32 "1fipb3bryaimr30lcxsxrn0ymv24z39swca7s4z7p9xcfg3ban1b"))))
+    (properties `((upstream-name . "mblm")))
+    (build-system r-build-system)
+    (home-page "https://cran.r-project.org/web/packages/mblm/index.html")
+    (synopsis "Median-based linear models")
+    (description
+     "This package provides linear models based on Theil-Sen single median and
+Siegel repeated medians.  They are very robust (29 or 50 percent breakdown
+point, respectively), and if no outliers are present, the estimators are very
+similar to OLS.")
+    (license license:gpl2+)))
+
 (define-public r-mboost
   (package
    (name "r-mboost")
@@ -7210,6 +7231,57 @@ T distribution.  There is only one exported function, @code{e_trunct},
 which should be seen for details.")
    (license license:expat)))
 
+(define-public r-evd
+  (package
+    (name "r-evd")
+    (version "2.3-6.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (cran-uri "evd" version))
+       (sha256
+        (base32 "0wc95hfj0gwkyghipdrhwd3s6q2agh9x2wy6y7dr6mjw7wnmjb36"))))
+    (properties `((upstream-name . "evd")))
+    (build-system r-build-system)
+    (home-page "https://cran.r-project.org/package=evd")
+    (synopsis "Functions for extreme value distributions")
+    (description
+     "This package extends simulation, distribution, quantile and density
+functions to univariate and multivariate parametric extreme value distributions,
+and provides fitting functions which calculate maximum likelihood estimates for
+univariate and bivariate maxima models, and for univariate and bivariate
+threshold models.")
+    (license license:gpl3)))
+
+(define-public r-evmix
+  (package
+    (name "r-evmix")
+    (version "2.12")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (cran-uri "evmix" version))
+       (sha256
+        (base32 "02rabc9snci00s1x7h0svfr66lmw1wjcdg0149wc52mnccsdaivf"))))
+    (properties `((upstream-name . "evmix")))
+    (build-system r-build-system)
+    (propagated-inputs
+     (list r-gsl
+           r-mass
+           r-sparsem))
+    (home-page "http://www.math.canterbury.ac.nz/~c.scarrott/evmix.shtml")
+    (synopsis
+     "Extreme value threshold estimation and uncertainty quantification")
+    (description
+     "This package provides the usual distribution functions, maximum likelihood
+inference and model diagnostics for univariate stationary extreme value mixture
+models.  Also, there are provided kernel density estimation including various
+boundary corrected kernel density estimation methods and a wide choice of kernels,
+with cross-validation likelihood based bandwidth estimator.  Reasonable
+consistency with the base functions in the evd package is provided, so that users
+can safely interchange most code.")
+    (license license:gpl3)))
+
 (define-public r-excelr
   (package
     (name "r-excelr")
@@ -8931,6 +9003,30 @@ distribution with mean equal to @code{mean} and standard deviation equal to
 @code{sd}.  It includes density, distribution, quantile, and expected value
 functions, as well as a random generation function.")
     (license license:gpl2)))
+
+(define-public r-truncdist
+  (package
+    (name "r-truncdist")
+    (version "1.0-2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (cran-uri "truncdist" version))
+       (sha256
+        (base32 "02ihw4ixhadwr3sqm6r264i8vpcaz8pn69vkzabd8fwqvn5vcj5q"))))
+    (properties `((upstream-name . "truncdist")))
+    (build-system r-build-system)
+    (propagated-inputs (list r-evd))
+    (home-page "https://cran.r-project.org/package=truncdist")
+    (synopsis "Truncated random variables")
+    (description
+     "This package provides a collection of tools to evaluate probability density
+functions, cumulative distribution functions, quantile functions and random
+numbers for truncated random variables.  These functions are provided to also
+compute the expected value and variance.  @acronym{Q-Q, quantile–quantile} plots
+can be produced.  All the probability functions in the stats, stats4 and evd
+packages are automatically available for truncation.")
+    (license license:gpl2+)))
 
 (define-public r-rsolnp
   (package
